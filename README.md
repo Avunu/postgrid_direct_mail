@@ -56,10 +56,6 @@ Letters go to any Frappe **Address**, optionally to the attention of a **Contact
 
 ## Installation
 
-On Frappe Cloud, install Direct Mail via PostGrid from the [Frappe marketplace](https://cloud.frappe.io/marketplace/apps/postgrid_direct_mail).
-
-On a bench of your own:
-
 ```bash
 bench get-app https://github.com/Avunu/postgrid_direct_mail --branch version-16
 bench --site <site> install-app postgrid_direct_mail
