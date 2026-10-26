@@ -1,51 +1,55 @@
-# Direct Mail via PostGrid
+---
+title: Direct Mail via PostGrid
+description: Mail the printed version of a Frappe or ERPNext document as a physical letter through PostGrid, by hand or from a Notification.
+nav_title: Overview
+order: 0
+updated: 2026-10-26
+---
 
-Direct mail for Frappe: send documents as physical letters via PostGrid
+Some customers and suppliers still need paper: invoices, statements, notices and purchase orders. Direct Mail via PostGrid mails the printed version of a Frappe or ERPNext document as a physical letter through [PostGrid's Print & Mail API](https://www.postgrid.com/ref/avunu), so nobody has to print, fold, stuff or stamp anything. PostGrid prints and posts the letter, and its delivery status comes back to the document's timeline.
 
-Direct Mail via PostGrid is a Frappe app that mails the printed version of a Frappe or ERPNext document as a physical letter through [PostGrid's Print & Mail API](https://www.postgrid.com/ref/avunu). You can mail a submitted document, such as an invoice, purchase order or customer statement, to any Frappe Address (optionally addressed to a Contact), such as those of customers, suppliers and employees. You can also automate direct mail with the Mailed Letter channel it adds to Notifications.
+It is for teams that send documents by post and want the letter recorded on the document it came from. Letters go to any Frappe Address, optionally to the attention of a Contact, so they work for customers, suppliers, employees and any other DocType that links to an address. It runs on Frappe v16, ERPNext is optional, and it is free software under the [MIT licence](../license.txt).
 
-## Features
+## What you get
 
-- Send physical letters from the print view of any submitted document
-- Mail documents automatically from Notifications
-- Choose a print format (and an optional cover letter) for each mailing
-- Track the delivery status of each letter through PostGrid webhooks
-- See each letter in the document timeline, with an optional saved PDF copy
+### A Mail button on the print view
 
-## Demo
+The print view of every submitted document has a **Mail** button. It opens the **Mail Letter** dialog with the sender, recipient and contact filled in from the document, and mails the print format you are looking at, with an optional cover letter in front. See [Mail a document](mail-a-document.md).
 
-From the print view of a submitted document, you can send a physical letter to any recipient using the added "Mail" button:
-![PostGrid Mailing](https://github.com/Avunu/postgrid_direct_mail/assets/4996285/58ed1243-c0fe-4bef-9280-665d82e2ecf8)
+![The Mail Letter dialog on a statement's print view, with the sender, recipient, contact and mailing options filled in](screenshots/mail-dialog-light.webp)
 
-You can also automate your mailings on doctype events using Notifications:
-![PostGrid Notification](https://github.com/Avunu/postgrid_direct_mail/assets/4996285/f6988376-aec3-4731-9ad5-eb249827d389)
+### Letters from Notifications
 
-## Installation
+A **Mailed Letter** channel on Notification mails the document on the New, Save, Submit and Cancel events, a number of days before or after a date, or on a document method. See [Mail documents from a Notification](notifications.md).
 
-```
-bench get-app https://github.com/Avunu/postgrid_direct_mail --branch develop
-bench --site [site-name] install-app postgrid_direct_mail
-```
+![A Notification on the Mailed Letter channel, with its sender, recipient fields and mailing options](screenshots/notification-light.webp)
 
-## Configuration
+### Delivery status in the timeline
 
-1. [Set up your PostGrid account](https://www.postgrid.com/ref/avunu) and [obtain the API credentials](https://dashboard.postgrid.com/dashboard/settings).
-2. In Frappe/ERPNext, open the PostGrid Settings.
-3. Enter your PostGrid Test and Live API keys, and choose which Mode (Test or Live) is active.
-4. Set the default options (address placement, envelope type, double sided, color, express), and choose whether to save PDF copies and update addresses from PostGrid's verified results.
-5. Save the configuration. The first save in each mode registers a PostGrid webhook for that mode, so your site must be reachable from the internet for delivery status updates to arrive.
-6. To replace the webhooks later, for example after changing the site's URL, use **Reset Webhooks** in the settings form's actions. It resets the webhook of each mode that has an API key, skips a mode without one, and tells you which modes it reset, skipped or could not reset, and why. Each mode is reset on its own, so if one mode fails (for example, an invalid Live key), the other mode's new webhook is still kept, and the failure is also recorded in the Error Log. If a mode's old webhook was deleted but no new one could be made, its webhook id is cleared; run **Reset Webhooks** again, or save the settings in that mode, once the problem is fixed.
+Each letter appears in the document's timeline with its recipient, its delivery status and a link to the letter in the PostGrid dashboard. PostGrid's webhook keeps the status current, and the app can keep a copy of PostGrid's PDF and update addresses with PostGrid's verified version. See [Track mailed letters](track-letters.md).
 
-## Current limitations
+![A mailed letter in the statement's timeline, with its recipient, delivery status and PostGrid menu](screenshots/timeline-light.webp)
 
-- Only letters are supported. Postcards and cheques are not implemented yet.
-- A Mailed Letter notification mails on the New, Save, Submit, Cancel, Days Before and Days After events, and on a Method event for `after_insert`, `on_update`, `on_submit` or `on_cancel`. The Value Change, Minutes Before and Minutes After events don't mail.
-- Without ERPNext, when a document has no company address, the Mail dialog's From Address starts empty and has to be picked by hand.
+### One settings page
 
-## Development
+**PostGrid Settings** holds the Test and Live API keys, the mode in use and the default mailing options the Mail dialog starts from. See [Configuration](configuration.md).
 
-The commands, the source layout and the rename shim are described in [Development](development.md).
+## Where to start
 
-## License
+| You are                            | Read                                                                                                                            |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| A user mailing documents           | [Mail a document](mail-a-document.md), then [Track mailed letters](track-letters.md)                                            |
+| The administrator setting it up    | [Install and upgrade](install.md), [Configuration](configuration.md) and [Mail documents from a Notification](notifications.md) |
+| Anyone whose letter did not go out | [Limitations and troubleshooting](troubleshooting.md)                                                                           |
+| A developer changing the app       | [Development](development/README.md) and [How it works](development/architecture.md)                                            |
 
-[MIT](https://github.com/Avunu/postgrid_direct_mail/blob/develop/license.txt), Copyright (c) 2024–present Avunu LLC.
+## Requirements
+
+- A bench with Frappe v16. The app declares `frappe >=16.0.0,<17.0.0`.
+- No other Frappe app. With ERPNext installed, the Mail dialog and the Notification form also fall back to the company's default address for the sender.
+- A PostGrid Print & Mail account and its Test or Live API key.
+- A site that PostGrid can reach over the internet, for delivery status updates.
+
+## Source and changes
+
+The source is at [github.com/Avunu/postgrid_direct_mail](https://github.com/Avunu/postgrid_direct_mail). Release notes are on the [releases page](https://github.com/Avunu/postgrid_direct_mail/releases).
