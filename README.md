@@ -31,6 +31,8 @@ Some customers and suppliers still need paper: invoices, statements, notices and
 
 Letters go to any Frappe **Address**, optionally to the attention of a **Contact**, so they work for customers, suppliers, employees and any other DocType that links to an address. You can send a letter by hand from the print view, or have a **Notification** mail one when a document is created, saved, submitted or cancelled, or a set number of days before or after a date.
 
+Full documentation: [docs.avunu.net/postgrid-direct-mail/docs/](https://docs.avunu.net/postgrid-direct-mail/docs/).
+
 ## Features
 
 - A **Mail** button on the print view of every submitted document. It mails the print format you are looking at, with the sender, recipient and contact filled in from the document's address and contact fields.
@@ -72,23 +74,27 @@ Until the first release creates the `version-16` branch, install from `develop` 
 3. Enter the Test and Live API keys, and choose the **Mode** that is in use.
 4. Set the default options: **Address Placement**, **Envelope Type**, **Double Sided**, **Color** and **Express**. The Mail dialog starts from these.
 5. Choose whether to **Save PDF Files** (keep PostGrid's PDF of each letter) and **Update Addresses** (overwrite an address with PostGrid's verified version).
-6. Save. The first save in each mode registers a webhook with PostGrid for that mode, so the site must be reachable from the internet for delivery updates to arrive. **Reset Webhooks** in the form's actions replaces the webhook on the Test and the Live account: for each mode it deletes the webhook the settings record, registers a new one and records its id, then reports which modes it reset. A mode without an API key is skipped, so nothing is deleted or created on that account and its webhook id stays as it is. With neither key entered it changes nothing and asks for one. Each mode is reset on its own, so a failure in one mode (an invalid key, a PostGrid error) is reported and logged in the Error Log, and never stops or undoes the other: if Live fails after Test was reset, the new Test webhook id is kept. A stored id always matches PostGrid: when the old webhook could not be deleted, or there was none and PostGrid could not register one, the id stays as it was, and when the old one was deleted but PostGrid could not register a new one the id is cleared, so the next save in that mode, or the next Reset Webhooks, registers one. The report lists the modes reset, skipped and failed, with PostGrid's reason for each failure, and is shown as an error when any mode failed.
+6. Save. The first save in each mode registers a webhook with PostGrid for that mode, so the site must be reachable from the internet for delivery updates to arrive. **Reset Webhooks** in the form's actions replaces the webhooks later, for example after the site's address changes.
+
+Every setting, the webhook and the list of what the app adds to a site are in [docs/configuration.md](docs/configuration.md).
 
 To mail documents automatically, create a **Notification**, set its **Channel** to **Mailed Letter**, and fill in the **Direct Mail Settings** section: the **From Address**, the document's **To Address Field** and **To Contact Field**, the print format, the mailing options and an optional cover letter.
 
 ## How It Works
 
-- The print page script (`page_js` for `print`) extends Frappe's print view with the **Mail** button and its dialog. The dialog's defaults come from the document's `company_address` (the sender; with ERPNext installed and no `company_address`, the company's default address), its `customer_address`, `shipping_address`, `billing_address`, `supplier_address` or `address` (the recipient, first one set), and its `contact_person`.
-- `mail_letter` renders the print format, and the cover letter when there is one, to PDF, merges them with pypdf and sends the letter with PostGrid's Python client (`postgrid-python` 1.x). It records the request and PostGrid's response in an **Integration Request**, and on success adds a **Communication** of type **Mailed Letter** to the document, which the timeline shows through `additional_timeline_content`.
-- PostGrid posts status changes to a guest endpoint as a JWT signed with the webhook secret. The app verifies it before reading anything, then updates the Integration Request and the Communication's delivery status. An event whose status is not a letter status (`ready`, `printing`, `processed_for_delivery`, `completed` or `cancelled`), such as a return envelope order's, is acknowledged and ignored.
-- Mailed Letter notifications extend Frappe's own Notification controller (`extend_doctype_class`), so they run on Frappe's normal notification events and daily job; other channels are left to Frappe.
-- On install and migrate the app adds **Mailed Letter** to the channel options of Notification and the type options of Communication, with property setters, and adds the custom fields it ships on Address and Notification. On install it also links PostGrid Settings from the Integrations workspace. Uninstalling removes all of these.
+- The print page script (`page_js` for `print`) extends Frappe's print view with the **Mail** button and its dialog, which fills the sender, recipient and contact from the document's address and contact fields.
+- `mail_letter` renders the print format, and the cover letter when there is one, to PDF, sends it with PostGrid's Python client, records the call in an **Integration Request** and adds a **Communication** of type **Mailed Letter** that the timeline shows.
+- PostGrid posts status changes to a guest endpoint as a JWT signed with the webhook secret. The app verifies it before reading anything, then updates the Integration Request and the Communication's delivery status.
+- Mailed Letter notifications extend Frappe's own Notification controller (`extend_doctype_class`), so they run on Frappe's normal notification events and daily job.
+- Install and migrate add **Mailed Letter** to the Notification channel and Communication type options, and the custom fields on Address and Notification; uninstalling removes them.
+
+The details are in [docs/development/architecture.md](docs/development/architecture.md).
 
 ## Limitations
 
 - Only letters are supported. Postcards and cheques are not implemented, although the webhook is registered for their events.
 - The **Mail** button appears only on submitted (or cancelled) documents, so DocTypes that cannot be submitted can only be mailed by a Notification.
-- A Mailed Letter notification mails on the New, Save, Submit, Cancel, Days Before and Days After events, and on a Method event for `after_insert`, `on_update`, `on_submit` or `on_cancel`. The Value Change, Minutes Before and Minutes After events don't mail.
+- A Mailed Letter notification mails on the New, Save, Submit, Cancel, Days Before and Days After events, and on a Method event for `after_insert`, `on_update`, `on_submit` or `on_cancel`. The Value Change, Minutes Before, Minutes After and Custom events don't mail.
 - Without ERPNext, when a document has no `company_address`, the **From Address** in the Mail dialog starts empty and has to be picked by hand.
 - Delivery updates need the site to be reachable by PostGrid over the internet.
 
@@ -115,7 +121,7 @@ The managed files, checks and release flow are described in the [app standards d
 
 <!-- frappe-nix:end development -->
 
-The source layout and the commands for working on the app are described in [docs/development.md](docs/development.md).
+The source layout and the commands for working on the app are described in [docs/development/README.md](docs/development/README.md).
 
 <!-- frappe-nix:begin license -->
 
