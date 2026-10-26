@@ -38,15 +38,15 @@ The app has one settings page, **PostGrid Settings**. It is linked from the **In
 
 These are the starting values of the Mail dialog on the print view. A Mailed Letter notification does not use them: it has its own copy of each option.
 
-| Field                 | What it does                                                                                                                            | Default |
-| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| **Address Placement** | **Insert Blank Page** puts the address on an extra first page; **Top of First Page** prints it at the top of the document's first page. | Empty   |
-| **Color**             | Prints in colour.                                                                                                                       | Off     |
-| **Double Sided**      | Prints on both sides of the paper.                                                                                                      | Off     |
-| **Express**           | Sends the letter by PostGrid's express mail.                                                                                            | Off     |
-| **Envelope Type**     | **Standard Double Window** or **Flat**.                                                                                                 | Empty   |
+| Field                 | What it does                                                                                                                            | Default                |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| **Address Placement** | **Insert Blank Page** puts the address on an extra first page; **Top of First Page** prints it at the top of the document's first page. | Insert Blank Page      |
+| **Color**             | Prints in colour.                                                                                                                       | Off                    |
+| **Double Sided**      | Prints on both sides of the paper.                                                                                                      | Off                    |
+| **Express**           | Sends the letter by PostGrid's express mail.                                                                                            | Off                    |
+| **Envelope Type**     | **Standard Double Window** or **Flat**.                                                                                                 | Standard Double Window |
 
-**Address Placement** and **Envelope Type** are required in the Mail dialog, so leaving them empty here means choosing them each time.
+**Address Placement** and **Envelope Type** have no default of their own, so Frappe starts them at their first option, as it does for any Select field without one.
 
 ### Hidden fields
 

@@ -20,7 +20,7 @@ The print view of every submitted document has a **Mail** button. It opens the *
 
 ### Letters from Notifications
 
-A **Mailed Letter** channel on Notification mails the document on the New, Save, Submit and Cancel events, a number of days before or after a date, or on a document method. See [Mail documents from a Notification](notifications.md).
+A **Mailed Letter** channel on Notification mails the document on the New, Save, Submit and Cancel events, a number of days before or after a date, or on the `after_insert`, `on_update`, `on_submit` and `on_cancel` methods. See [Mail documents from a Notification](notifications.md).
 
 ![A Notification on the Mailed Letter channel, with its sender, recipient fields and mailing options](screenshots/notification-light.webp)
 

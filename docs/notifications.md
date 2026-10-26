@@ -26,9 +26,9 @@ A Notification on the **Mailed Letter** channel mails the document it fires for,
 | **From Address**                         | The sender, the same for every letter. When it is empty and you have a default Company, the form fills in that company's default address with ERPNext's lookup. Without it nothing is mailed. |
 | **To Address Field**                     | Required. The document's field that holds the recipient's Address. The list offers the DocType's Link fields to Address, as `fieldname (Label)`.                                              |
 | **To Contact Field**                     | Optional. The document's field that holds the Contact for the attention line. The list offers the DocType's Link fields to Contact.                                                           |
-| **Address Placement**                    | **Insert Blank Page** or **Top of First Page**. Left empty, the letter uses **Insert Blank Page**.                                                                                            |
+| **Address Placement**                    | **Insert Blank Page** or **Top of First Page**. A new notification starts with **Insert Blank Page**.                                                                                         |
 | **Color**, **Double Sided**, **Express** | The mailing options, as in the Mail dialog.                                                                                                                                                   |
-| **Envelope Type**                        | Required. **Standard Double Window** or **Flat**.                                                                                                                                             |
+| **Envelope Type**                        | Required. **Standard Double Window** or **Flat**. A new notification starts with **Standard Double Window**.                                                                                  |
 | **With Cover Letter**                    | Puts a cover letter in front of the document.                                                                                                                                                 |
 | **Cover Letter Print Format**            | Shown, and required, when **With Cover Letter** is ticked. With **Double Sided** ticked, a blank page is put between the cover letter and the document.                                       |
 
@@ -50,6 +50,8 @@ On an event that does not mail, the notification still sends its system notifica
 
 > [!IMPORTANT]
 > The letter is a print of the document, so Frappe's print rules apply. On a submittable DocType, a notification on New or Save mails a draft, which Frappe prints only when **Allow Print for Draft** is ticked in Print Settings, and one on Cancel needs **Allow Print for Cancelled**. Otherwise the letter is not sent and the reason is in the Error Log.
+>
+> Frappe also runs the Save event when a document is submitted, so a Save notification on a submittable DocType mails at every save of the draft and again at submit. Use Submit to mail each document once.
 
 ## When a letter is not sent
 

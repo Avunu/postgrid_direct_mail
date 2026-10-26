@@ -20,6 +20,8 @@ The document's timeline shows a card for each mailed letter, newest first.
 - The menu (three dots), with **Open in PostGrid**, which opens the letter in the PostGrid dashboard.
 - The text "`<DocType>` mailed as `<Print Format>` to:" and the recipient's address.
 
+A Mailed Letter notification with no **Print Format** prints with the DocType's default format, and its card then reads "mailed as None".
+
 The card is a Communication of type **Mailed Letter**, linked to the document. Its subject is the document's name followed by "Direct Mail", and its sender is the user who mailed it.
 
 ## Delivery status
