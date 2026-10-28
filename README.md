@@ -15,6 +15,7 @@ Direct mail for Frappe: send documents as physical letters via PostGrid
 [![Latest release](https://img.shields.io/github/v/release/Avunu/postgrid_direct_mail)](https://github.com/Avunu/postgrid_direct_mail/releases)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](license.txt)
 [![Frappe v16](https://img.shields.io/badge/Frappe-v16-blue)](https://github.com/frappe/frappe/tree/version-16)
+[![Documentation](https://img.shields.io/badge/docs-docs.avunu.net-blue)](https://docs.avunu.net/postgrid-direct-mail/)
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/mail-dialog-dark.webp">
@@ -102,6 +103,7 @@ The details are in [docs/development/architecture.md](docs/development/architect
 
 ## Support
 
+- Documentation: [docs.avunu.net/postgrid-direct-mail/](https://docs.avunu.net/postgrid-direct-mail/)
 - Bug reports and questions: [GitHub issues](https://github.com/Avunu/postgrid_direct_mail/issues)
 - E-mail: <mail@avu.nu>
 
