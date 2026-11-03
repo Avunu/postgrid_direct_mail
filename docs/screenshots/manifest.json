@@ -7,7 +7,7 @@
 		"readme": "hero",
 		"width": 2880,
 		"height": 1800,
-		"sha256": "2baff70aac10438110129a85905a541de504f80c82d7181fa06c597d27dfabd6"
+		"sha256": "bc9c80d1655d1be831f552aea162506835cacee3954addf78195c1b7369573fc"
 	},
 	{
 		"name": "mail-dialog",
@@ -17,7 +17,7 @@
 		"readme": "hero",
 		"width": 2880,
 		"height": 1800,
-		"sha256": "2db15c53f383bc2d5b9d3bf0f3aff263da141fa5dd08b01c479ca7b7919bdf9d"
+		"sha256": "dca92419ecd2473b45b37ada480963bf6f73f8da20ebc44256014bb07b11de64"
 	},
 	{
 		"name": "notification",
@@ -27,7 +27,7 @@
 		"readme": "feature",
 		"width": 2880,
 		"height": 1800,
-		"sha256": "951c0d46729601cac93d129eebcbd70232f89ec1fdd8a59f1d8edc7bc1eb19f7"
+		"sha256": "be9220d6e86de3da33b5b0383fa944ad3603bf2a9119c3757ff7871103d7aa31"
 	},
 	{
 		"name": "notification",
@@ -37,7 +37,7 @@
 		"readme": "feature",
 		"width": 2880,
 		"height": 1800,
-		"sha256": "420faf26227875dacddac72af06680e090c5ee26744def38893fc513dce7b0cc"
+		"sha256": "1cd6c526c7804d0ef2a73d2b474703cc33db1d2ae454991df7ca261996f578b0"
 	},
 	{
 		"name": "settings",
