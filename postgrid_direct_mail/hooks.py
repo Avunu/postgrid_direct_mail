@@ -15,6 +15,18 @@ app_license = "MIT"
 app_name = "postgrid_direct_mail"
 app_publisher = "Avunu LLC"
 app_title = "Direct Mail via PostGrid"
+
+# Frappe's About dialog takes the logo from here. not_listed keeps the app off the apps screen.
+# app_logo_url would change the site's own logo.
+add_to_apps_screen = [
+	{
+		"name": "postgrid_direct_mail",
+		"logo": "/assets/postgrid_direct_mail/images/postgrid_direct_mail-logo.svg",
+		"title": "Direct Mail via PostGrid",
+		"route": "/desk",
+		"has_permission": "postgrid_direct_mail.apps_screen.not_listed",
+	}
+]
 before_uninstall = "postgrid_direct_mail.install.before_uninstall"
 doctype_js = {"Notification": "public/js/notification.js"}
 # Mailed Letter notifications ride on frappe's own notification run, which already covers every DocType
