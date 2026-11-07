@@ -1,5 +1,12 @@
 # Changelog
 
+## [16.1.0](https://github.com/Avunu/postgrid_direct_mail/compare/v16.0.0...v16.1.0) (2026-11-07)
+
+
+### Features
+
+* show the app's logo in the About dialog, on frappe-nix 2.4.0 ([#69](https://github.com/Avunu/postgrid_direct_mail/issues/69)) ([d97fbcd](https://github.com/Avunu/postgrid_direct_mail/commit/d97fbcd7c5e986e8ea0198e5a19dc6139d3d20ea))
+
 ## [16.0.0](https://github.com/Avunu/postgrid_direct_mail/compare/v0.0.1...v16.0.0) (2026-10-30)
 
 
