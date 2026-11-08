@@ -36,12 +36,9 @@ if (BasePrintView) {
 			super.make();
 			/** @type {PostGridDefaults | undefined} */
 			this.postgrid_defaults = undefined;
-			this.erpnext_installed = false;
+			this.erpnext_installed = frappe.utils.get_installed_apps().includes("erpnext");
 			this.get_postgrid_defaults();
 			this.mail_button_added = false;
-			void frappe.xcall("frappe.core.doctype.module_def.module_def.get_installed_apps").then((r) => {
-				this.erpnext_installed = Array.isArray(r) && r.includes("erpnext");
-			});
 		}
 
 		get_postgrid_defaults() {
