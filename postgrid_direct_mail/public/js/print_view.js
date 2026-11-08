@@ -24,8 +24,6 @@
 
 /** @typedef {{ message: string; indicator: string }} MailLetterResult */
 
-/** @typedef {frappe.Doc<frappe.DocType> & Record<string, unknown>} PrintedDoc */
-
 // frappe.ui.form.PrintView exists only on the print page, which is the only page this script runs on.
 const BasePrintView = frappe.ui.form.PrintView;
 
@@ -62,11 +60,11 @@ if (BasePrintView) {
 		 */
 		show(frm) {
 			const shown = super.show(frm);
-			this.add_mail_button(/** @type {PrintedDoc} */ (frm.doc));
+			this.add_mail_button(frm.doc);
 			return shown;
 		}
 
-		/** @param {PrintedDoc} doc */
+		/** @param {import("frappe-types").FrappeDoc} doc */
 		add_mail_button(doc) {
 			if (doc.docstatus == 0) return;
 			if (!this.mail_button_added) {
@@ -75,7 +73,7 @@ if (BasePrintView) {
 			}
 		}
 
-		/** @param {PrintedDoc} doc */
+		/** @param {import("frappe-types").FrappeDoc} doc */
 		mail_letter_dialog(doc) {
 			const postgrid_defaults = this.postgrid_defaults;
 			/** @param {unknown} value */
@@ -90,6 +88,7 @@ if (BasePrintView) {
 			const default_to_contact = as_name(doc["contact_person"]);
 
 			const misc = postgrid_defaults?.misc;
+			/** @type {frappe.ui.Dialog<MailLetterValues>} */
 			const d = new frappe.ui.Dialog({
 				title: "Mail Letter",
 				fields: [
@@ -151,13 +150,10 @@ if (BasePrintView) {
 						label: "Additional Options",
 						fieldname: "misc",
 						fieldtype: "MultiCheck",
-						// MultiCheck reads each option's `checked` (form/controls/multicheck.js:112-114).
-						// frappe-types' SelectOption has no `checked`, so the options come from
-						// get_data, which the control reads in place of `options` (multicheck.js:46-56).
-						get_data: () => [
-							{ value: "double_sided", label: "Double Sided", checked: misc?.double_sided },
-							{ value: "color", label: "Color", checked: misc?.color },
-							{ value: "express", label: "Express", checked: misc?.express },
+						options: [
+							{ value: "double_sided", label: "Double Sided", checked: Boolean(misc?.double_sided) },
+							{ value: "color", label: "Color", checked: Boolean(misc?.color) },
+							{ value: "express", label: "Express", checked: Boolean(misc?.express) },
 						],
 					},
 					{
@@ -194,14 +190,14 @@ if (BasePrintView) {
 						}),
 					},
 				],
-				// "medium" is not one of frappe's sizes. It adds no size class, and because a size is set the
-				// dialog doesn't size itself from its column breaks (ui/dialog.js:44-50), which would make
-				// this one "large". So it keeps the default width, which frappe-types' DialogSize can't name.
-				size: /** @type {import("frappe-types").DialogSize} */ (/** @type {unknown} */ ("medium")),
+				// "medium" adds no size class, but a set size stops the dialog sizing itself from its
+				// column breaks (ui/dialog.js:44-50), which would make this one "large".
+				size: "medium",
 				primary_action_label: "Mail via PostGrid",
+				/** @param {Partial<MailLetterValues>} parameters */
 				primary_action: (parameters) => {
 					d.hide();
-					this.mail_letter(doc, /** @type {MailLetterValues} */ (parameters));
+					this.mail_letter(doc, parameters);
 				},
 			});
 			d.show();
@@ -219,8 +215,9 @@ if (BasePrintView) {
 						method: "erpnext.setup.doctype.company.company.get_default_company_address",
 						args: { name: company },
 						debounce: 2000,
+						/** @param {import("frappe-types").FrappeResponse<string | null>} r */
 						callback(r) {
-							const address = as_name(r?.message);
+							const address = r.message;
 							if (address && !d.get_value("from_address")) {
 								void d.set_value("from_address", address);
 							}
@@ -231,8 +228,8 @@ if (BasePrintView) {
 		}
 
 		/**
-		 * @param {PrintedDoc} doc
-		 * @param {MailLetterValues} parameters
+		 * @param {import("frappe-types").FrappeDoc} doc
+		 * @param {Partial<MailLetterValues>} parameters
 		 */
 		mail_letter(doc, parameters) {
 			const current_print_format = this.selected_format();
