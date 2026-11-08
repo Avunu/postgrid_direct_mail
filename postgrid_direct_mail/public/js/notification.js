@@ -21,7 +21,11 @@ frappe.ui.form.on("Notification", {
 			frm.set_df_property("column_break_5", "hidden", 1);
 			frm.set_df_property("message_sb", "hidden", 1);
 			const attachment_settings = frm.fields_dict["column_break_25"];
-			if (attachment_settings && is_collapsed_section(attachment_settings)) {
+			if (
+				attachment_settings &&
+				"is_collapsed" in attachment_settings &&
+				attachment_settings.is_collapsed()
+			) {
 				attachment_settings.collapse();
 			}
 			void frm.set_value("attach_print", 1);
@@ -36,8 +40,9 @@ frappe.ui.form.on("Notification", {
 						method: "erpnext.setup.doctype.company.company.get_default_company_address",
 						args: { name: company },
 						debounce: 2000,
+						/** @param {import("frappe-types").FrappeResponse<string | null>} r */
 						callback(r) {
-							void frm.set_value("from_address", typeof r?.message === "string" ? r.message : "");
+							void frm.set_value("from_address", r.message ?? "");
 						},
 					});
 				}
@@ -66,24 +71,6 @@ frappe.ui.form.on("Notification", {
 		}
 	},
 });
-
-/**
- * Whether a section is collapsible and collapsed: frappe's section control has `is_collapsed()`
- * and `collapse()`, which the field's control type doesn't declare.
- * @param {unknown} section
- * @returns {section is { is_collapsed(): boolean; collapse(): void }}
- */
-function is_collapsed_section(section) {
-	return (
-		typeof section === "object" &&
-		section !== null &&
-		"is_collapsed" in section &&
-		typeof section.is_collapsed === "function" &&
-		"collapse" in section &&
-		typeof section.collapse === "function" &&
-		Boolean(section.is_collapsed())
-	);
-}
 
 /**
  * Populate the to_address_document_field and to_contact_document_field options with the
