@@ -21,6 +21,6 @@ jobs:
   docs:
     permissions:
       contents: read # checkout
-    uses: Avunu/site-docs/.github/workflows/check-docs.yml@a45d88b2b8323db3c7046e4bc687077c76ba2558 # 2026-10-25
+    uses: Avunu/site-docs/.github/workflows/check-docs.yml@fd0f83b9bff27149371008e215e526ed1c261731 # v0.4.0
     with:
       path: postgrid-direct-mail
